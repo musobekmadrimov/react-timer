@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function Timer() {
   const [hours, SetHours] = useState(0);
@@ -9,13 +9,16 @@ export default function Timer() {
   const [activeStartButton, setActiveStartButton] = useState(false);
   const [activeStopButton, setActiveStopButton] = useState(false);
   const [activeResetButton, setActiveResetButton] = useState(false);
-  const [clickedTime, setClickedTime] = useState([]);
+  const [activeWaitButton, setActiveWaitButton] = useState(false);
+  const [clickedTime, setClickedTime] = useState(0);
+  const previousValue = useRef(0);
 
   const startTimer = (e) => {
     setStop(false);
     setActiveStartButton(true);
     setActiveStopButton(false);
     setActiveResetButton(false);
+    setActiveWaitButton(false);
   };
 
   const stopTimer = () => {
@@ -27,6 +30,7 @@ export default function Timer() {
     setActiveStartButton(false);
     setActiveStopButton(true);
     setActiveResetButton(false);
+    setActiveWaitButton(false);
   };
 
   const resetTimer = () => {
@@ -43,56 +47,34 @@ export default function Timer() {
       setActiveStopButton(false);
       setActiveResetButton(true);
     }
+    setActiveWaitButton(false);
 
     setTimeout(() => {
       setActiveResetButton(false);
     }, 150);
   };
 
-  const waitTimer = () => {
-    if (clickedTime.length > 0) {
-      setClickedTime([
-        clickedTime[clickedTime.length - 1],
-        new Date().getTime(),
-      ]);
-      if (
-        clickedTime[clickedTime.length - 1] -
-          clickedTime[clickedTime.length - 2] <=
-        500
-      ) {
-        setStop(true);
-        setClickedTime([clickedTime[clickedTime.length - 1]]);
-        console.log("ClickedTime 2: ", clickedTime[clickedTime.length - 1]);
-        console.log("ClickedTime 1: ", clickedTime[clickedTime.length - 2]);
-        console.log(
-          "Farq: ",
-          clickedTime[clickedTime.length - 1] -
-            clickedTime[clickedTime.length - 2]
-        );
-        console.log(clickedTime);
-      } else {
-        setClickedTime([clickedTime[clickedTime.length - 1]]);
-        console.log("ClickedTime 2: ", clickedTime[clickedTime.length - 1]);
-        console.log("ClickedTime 1: ", clickedTime[clickedTime.length - 2]);
-        console.log(
-          "Farq: ",
-          clickedTime[clickedTime.length - 1] -
-            clickedTime[clickedTime.length - 2]
-        );
-        console.log(clickedTime);
-      }
-    } else {
-      setClickedTime([new Date().getTime()]);
-      console.log("ClickedTime 2: ", clickedTime[clickedTime.length - 1]);
-      console.log("ClickedTime 1: ", clickedTime[clickedTime.length - 2]);
+  useEffect(() => {
+    if (clickedTime - previousValue.current < 300) {
+      setStop(true);
+      console.log("Previous TIme: ", previousValue.current);
+      console.log("Clicked TIme: ", clickedTime);
       console.log(
-        "Farq: ",
-        clickedTime[clickedTime.length - 1] -
-          clickedTime[clickedTime.length - 2]
+        "Difference between clicks: ",
+        clickedTime - previousValue.current
       );
-      console.log(clickedTime);
+    } else{
+        console.log(`You should click two times between 300 mls! You've clicked in ${clickedTime - previousValue.current} mls`)
     }
+  }, [clickedTime]);
+
+  const waitTimer = () => {
+    setClickedTime([new Date().getTime()]);
   };
+
+  useEffect(() => {
+    previousValue.current = clickedTime;
+  }, [clickedTime]);
 
   useEffect(() => {
     let interval = null;
@@ -158,8 +140,8 @@ export default function Timer() {
           Stop
         </button>
         <button
-          className={activeResetButton ? "waitButton clicked" : "waitButton"}
-          onClick={waitTimer}
+          className={activeWaitButton ? "waitButton clicked" : "waitButton"}
+          onClick={() => waitTimer()}
         >
           Wait
         </button>
