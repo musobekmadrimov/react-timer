@@ -3,7 +3,6 @@ import { usePopperTooltip } from "react-popper-tooltip";
 import "react-popper-tooltip/dist/styles.css";
 
 export default function Timer() {
-  console.log('Developed by Musobek Madrimov with ❤️! ✊')
   const [hours, SetHours] = useState(0);
   const [minutes, SetMinutes] = useState(0);
   const [seconds, SetSeconds] = useState(0);
@@ -122,6 +121,10 @@ export default function Timer() {
     }
     return () => clearInterval(interval);
   });
+
+  useEffect(() => {
+    console.log('Developed by Musobek Madrimov with ❤️! ✊')
+  }, [])
   return (
     <div className="timerContainer">
       <div className="header">
