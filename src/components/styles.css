@@ -169,3 +169,52 @@ body {
   background: #e0e0e0;
   box-shadow: inset 7px 7px 10px #969696, inset -7px -7px 10px #ffffff;
 }
+
+.tooltip-text{
+  width: 300px;
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 20px !important;
+}
+
+
+/* Responsive Settings */
+
+@media screen and (max-width: 400px) {
+  .timerContainer {
+    width: 300px;
+    margin: 0 auto;
+  }
+
+  .header{
+    font-size: 25px;
+  }
+
+  .timer{
+    width: 250px;
+    height: 250px;
+  }
+
+  .clockHands, .hours, .minutes, .seconds, .milliseconds{
+    font-size: 25px;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 568px) {
+  .timerContainer {
+    width: 350px;
+    margin: 0 auto;
+  }
+
+  .header{
+    font-size: 25px;
+  }
+
+  .timer{
+    width: 250px;
+    height: 250px;
+  }
+
+  .clockHands, .hours, .minutes, .seconds, .milliseconds{
+    font-size: 25px;
+  }
+}

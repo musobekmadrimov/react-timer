@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import { usePopperTooltip } from "react-popper-tooltip";
+import "react-popper-tooltip/dist/styles.css";
 
 export default function Timer() {
+  console.log('Developed by Musobek Madrimov with ❤️! ✊')
   const [hours, SetHours] = useState(0);
   const [minutes, SetMinutes] = useState(0);
   const [seconds, SetSeconds] = useState(0);
@@ -12,6 +15,13 @@ export default function Timer() {
   const [activeWaitButton, setActiveWaitButton] = useState(false);
   const [clickedTime, setClickedTime] = useState(0);
   const previousValue = useRef(0);
+  const {
+    getArrowProps,
+    getTooltipProps,
+    setTooltipRef,
+    setTriggerRef,
+    visible,
+  } = usePopperTooltip();
 
   const startTimer = (e) => {
     setStop(false);
@@ -57,14 +67,21 @@ export default function Timer() {
   useEffect(() => {
     if (clickedTime - previousValue.current < 300) {
       setStop(true);
+      setActiveWaitButton(true)
+      setActiveStartButton(false)
+      setActiveStopButton(false)
       console.log("Previous TIme: ", previousValue.current);
       console.log("Clicked TIme: ", clickedTime);
       console.log(
         "Difference between clicks: ",
         clickedTime - previousValue.current
       );
-    } else{
-        console.log(`You should click two times between 300 mls! You've clicked in ${clickedTime - previousValue.current} mls`)
+    } else {
+      console.log(
+        `You should click two times between 300 ms! You've clicked in ${
+          clickedTime - previousValue.current
+        } ms`
+      );
     }
   }, [clickedTime]);
 
@@ -142,9 +159,19 @@ export default function Timer() {
         <button
           className={activeWaitButton ? "waitButton clicked" : "waitButton"}
           onClick={() => waitTimer()}
+          ref={setTriggerRef}
         >
           Wait
         </button>
+        {visible && (
+          <div
+            ref={setTooltipRef}
+            {...getTooltipProps({ className: "tooltip-container" })}
+          >
+            <div {...getArrowProps({ className: "tooltip-arrow" })} />
+            <p className="tooltip-text">You should click two times between <b>300 ms</b>! Open the console for seeing difference between two your clicks!</p>
+          </div>
+        )}
         <button
           className={activeResetButton ? "resetButton clicked" : "resetButton"}
           onClick={resetTimer}
