@@ -12,7 +12,7 @@ export default function Timer() {
   const [activeStopButton, setActiveStopButton] = useState(false);
   const [activeResetButton, setActiveResetButton] = useState(false);
   const [activeWaitButton, setActiveWaitButton] = useState(false);
-  const [clickedTime, setClickedTime] = useState(0);
+  const [clickedTime, setClickedTime] = useState(400);
   const previousValue = useRef(0);
   const {
     getArrowProps,
@@ -64,11 +64,15 @@ export default function Timer() {
   };
 
   useEffect(() => {
+    console.log("Developed by Musobek Madrimov with ❤️! ✊");
+  }, []);
+
+  useEffect(() => {
     if (clickedTime - previousValue.current < 300) {
       setStop(true);
-      setActiveWaitButton(true)
-      setActiveStartButton(false)
-      setActiveStopButton(false)
+      setActiveWaitButton(true);
+      setActiveStartButton(false);
+      setActiveStopButton(false);
       console.log("Previous TIme: ", previousValue.current);
       console.log("Clicked TIme: ", clickedTime);
       console.log(
@@ -122,9 +126,6 @@ export default function Timer() {
     return () => clearInterval(interval);
   });
 
-  useEffect(() => {
-    console.log('Developed by Musobek Madrimov with ❤️! ✊')
-  }, [])
   return (
     <div className="timerContainer">
       <div className="header">
@@ -172,7 +173,10 @@ export default function Timer() {
             {...getTooltipProps({ className: "tooltip-container" })}
           >
             <div {...getArrowProps({ className: "tooltip-arrow" })} />
-            <p className="tooltip-text">You should click two times between <b>300 ms</b>! Open the console for seeing difference between two your clicks!</p>
+            <p className="tooltip-text">
+              You should click two times between <b>300 ms</b>! Open the console
+              for seeing difference between two your clicks!
+            </p>
           </div>
         )}
         <button
